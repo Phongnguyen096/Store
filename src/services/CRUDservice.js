@@ -33,6 +33,20 @@ let hashUserPassword=(password) =>{
         }
     })
 }
+
+let getAllUser = () =>{
+    return new Promise(async(resolve , reject) =>{
+        try {
+            let users =await db.User.findAll({
+                raw : true ,
+            }) ;
+            resolve(users)
+        } catch (error) {
+            reject(error) ;
+        }
+    }) ;
+}
 module.exports = {
     createNewUser: createNewUser ,
+    getAllUser : getAllUser ,
 }
