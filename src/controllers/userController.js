@@ -17,13 +17,14 @@ let handleLogin = async (req, res) => {
   });
 };
 
-let getAllUser = async (req, res) => {
-  let users = await userService.getAllUserFromBD();
-  if (users) {
+let handleGetUser = async (req, res) => {
+  let id = req.query.id;
+  let user = await userService.getUserFromBD(id);
+  if (user) {
     return res.status(200).json({
       errorCode: 0,
       massage: "Success",
-      data: users,
+      user,
     });
   }
   return send.status(404).json({
@@ -31,7 +32,36 @@ let getAllUser = async (req, res) => {
     massage: "users empty !",
   });
 };
+
+let handleCreateNewUser = async (req, res) => {
+  let massage = await userService.CreateNewUserFromDB(req.body);
+  if (massage) {
+    return res.status(200).json({ massage });
+  }
+  return res.status(404).json({
+    massage: "Create user fail",
+  });
+};
+
+let handleDeleteUser = async (req, res) => {
+  let message = await userService.deleteUserFromDB(req.body.id);
+  if (message) {
+    res.status(200).json({ message });
+  }
+  res.status(404).json({ message: "Delete fail" });
+};
+
+let handleUpdateUser = async (req, res) => {
+  let message = await userService.updateUserFromDB(req.body);
+  if (message) {
+    res.status(200).json(message);
+  }
+  res.status(404).json({ message: "Update fail" });
+};
 module.exports = {
   handleLogin: handleLogin,
-  getAllUser: getAllUser,
+  handleGetUser: handleGetUser,
+  handleCreateNewUser: handleCreateNewUser,
+  handleDeleteUser: handleDeleteUser,
+  handleUpdateUser: handleUpdateUser,
 };
